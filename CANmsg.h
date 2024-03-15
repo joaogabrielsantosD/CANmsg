@@ -71,6 +71,15 @@ class CANmsg
             len += sizeof(T);
             return *this;
         }
+
+        template<class Q>
+        CANmsg &operator=(Q& val)
+        {
+            val = *reinterpret_cast<Q*>(&msg.data.uint8[0]);
+            len -= sizeof(Q);
+            memcpy(msg.data.uint8, msg.data.uint8 + sizeof(Q), len);
+            return *this;
+        }   
 };
 
 
