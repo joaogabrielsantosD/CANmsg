@@ -117,7 +117,7 @@ int CANmsg::Set_Filter(uint32_t Id, uint32_t Mask, bool Extended)
     return CAN.setRXFilter(Id, Mask, Extended);
 }
 
-void CANmsg::clear(uint32_t new_id, bool ext = false, uint8_t length = MAX_MESSAGE_LENGTH)
+void CANmsg::clear(uint32_t new_id, bool ext, uint8_t length)
 {
     len = 0;
     msg.id = new_id;
