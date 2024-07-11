@@ -1,7 +1,7 @@
 #ifndef CANMSG_H
 #define CANMSG_H
 
-#include "CAN/esp32_can.h"
+#include "src/esp32_can.h"
 
 #define CAN CAN0
 #define MAX_MESSAGE_LENGTH 8
