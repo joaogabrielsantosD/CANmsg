@@ -1,6 +1,4 @@
-/*
-  MCP2515.h - Library for Microchip MCP2515 CAN Controller
-  
+/*  
   Author: David Harding
   Maintainer: RechargeCar Inc (http://rechargecar.com)
   Further Modification: Collin Kidder
@@ -32,7 +30,7 @@
 #define __ESP32_CAN__
 
 #include "Arduino.h"
-#include <can_common.h>
+#include "can_common.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "freertos/queue.h"
@@ -45,7 +43,7 @@
 //#define DEBUG_SETUP
 #define BI_NUM_FILTERS 32
 
-#define BI_RX_BUFFER_SIZE	64
+#define BI_RX_BUFFER_SIZE	 64
 #define BI_TX_BUFFER_SIZE  16
 
 typedef struct

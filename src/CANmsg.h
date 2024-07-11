@@ -1,13 +1,13 @@
 #ifndef CANMSG_H
 #define CANMSG_H
 
-#include "src/esp32_can.h"
+#include "CAN/esp32_can.h"
 
 #define CAN CAN0
 #define MAX_MESSAGE_LENGTH 8
 typedef void (*callback)(CAN_FRAME*);
 
-class CANmsg : public ESP32CAN
+class CANmsg
 {
     private:
         uint8_t _ext = 0;

@@ -187,7 +187,7 @@ private:
 };
 
 /*Abstract function that mostly just sets an interface that all descendants must implement */
-class CAN_COMMON : public CAN_FRAME
+class CAN_COMMON
 {
 public:
 
