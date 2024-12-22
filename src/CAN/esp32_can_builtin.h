@@ -75,6 +75,7 @@ public:
   uint32_t set_baudrate(uint32_t ul_baudrate);
   void setListenOnlyMode(bool state);
   void enable();
+  int Restart_TWAI();
   void disable();
   bool sendFrame(CAN_FRAME& txFrame);
   bool rx_avail();
@@ -94,6 +95,7 @@ protected:
   bool initializedResources;
   bool readyForTraffic;
   int cyclesSinceTraffic;
+  int TWAI_INIT_OK;
 
 private:
   // Pin variables

@@ -96,10 +96,20 @@ void CAN_WatchDog_Builtin( void *pvParameters )
             if (status_info.state == TWAI_STATE_BUS_OFF)
             {
                 espCan->cyclesSinceTraffic = 0;
-                if (twai_initiate_recovery() != ESP_OK)
+                //if (twai_initiate_recovery() != ESP_OK)
+                //{
+                //    printf("Could not initiate bus recovery!\n");
+                //}
+            
+                if (espCan->Restart_TWAI() != ESP_OK)
                 {
-                    printf("Could not initiate bus recovery!\n");
+                    if (espCan->debuggingMode) 
+                        printf("Failed to restart TWAI!\n");
+                    continue;
                 }
+
+                if (espCan->debuggingMode) 
+                    printf("TWAI successfully recovered from Bus-Off.\n");
             }
         }
     }
@@ -334,21 +344,31 @@ void ESP32CAN::enable()
 {
     if (twai_driver_install(&twai_general_cfg, &twai_speed_cfg, &twai_filters_cfg) == ESP_OK)
     {
-        //printf("TWAI Driver installed\n");
+        if (debuggingMode)
+            printf("TWAI Driver installed\n");
     }
+
     else
     {
-        printf("Failed to install TWAI driver\n");
+        if (debuggingMode)
+            printf("Failed to install TWAI driver\n");
+        ESP32CAN::TWAI_INIT_OK = ESP_FAIL;
         return;
     }
+
     // Start TWAI driver
     if (twai_start() == ESP_OK)
     {
-        //printf("TWAI Driver started\n");
+        if (debuggingMode)
+            printf("TWAI Driver started\n");
+        ESP32CAN::TWAI_INIT_OK = ESP_OK;
     }
+
     else
     {
-        printf("Failed to start TWAI driver\n");
+        if (debuggingMode)
+            printf("Failed to start TWAI driver\n");
+        ESP32CAN::TWAI_INIT_OK = ESP_FAIL;
         return;
     }
     readyForTraffic = true;
@@ -360,6 +380,14 @@ void ESP32CAN::disable()
     twai_stop();
     vTaskDelay(pdMS_TO_TICKS(100)); //a bit of delay here seems to fix a race condition triggered by task_LowLevelRX
     twai_driver_uninstall();
+}
+
+int ESP32CAN::Restart_TWAI()
+{
+    disable();
+    vTaskDelay(pdMS_TO_TICKS(50)); //a bit of delay here seems to fix a race condition triggered by task_LowLevelRX
+    enable();
+    return ESP32CAN::TWAI_INIT_OK;
 }
 
 //This function is too big to be running in interrupt context. Refactored so it doesn't.
